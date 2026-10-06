@@ -16,5 +16,6 @@ import pandas as pd
 
 
 def merge_employees(timesheet: pd.DataFrame, employees: pd.DataFrame) -> pd.DataFrame:
+    """Return a copy of `timesheet` with the roster's columns added, one row per"""
     merged = pd.merge(timesheet, employees, how="left", on="employee_id")
     return merged

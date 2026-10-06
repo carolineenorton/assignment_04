@@ -7,7 +7,8 @@ from payroll import (
 )
 
 st.title("Salt City Coffee – Weekly Payroll")
-st.write("Upload the week's timesheet CSV to calculate payroll and download the provider's file.")
+st.write("Upload the week's timesheet CSV to calculate payroll" +
+        "and download the provider's file.")
 
 roster = load_employees()
 
@@ -44,7 +45,9 @@ if upload is not None:
 
     if len(unmatched) > 0:
         employee_ids = ", ".join(unmatched["employee_id"].astype(str))
-        st.warning(f"Unmatched employee IDs: {employee_ids}. Fix these before re-exporting.")
+        st.warning(f"Unmatched employee IDs: {employee_ids}."
+                   "Fix these before re-exporting."
+                   )
     else:
         st.success("All employees matched the roster.")
 

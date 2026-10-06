@@ -21,6 +21,7 @@ OVERTIME_MULTIPLIER = 1.5
 
 
 def calc_gross_pay(hours: float, rate: float) -> float:
+    """Return the gross pay for a week of work, given hours and hourly rate."""
     if pd.isna(rate):
         return 0.0
     if hours <= OVERTIME_THRESHOLD:
@@ -33,6 +34,7 @@ def calc_gross_pay(hours: float, rate: float) -> float:
 
 
 def classify_pay(hours: float, rate: float) -> str:
+    """Return a string label for the type of pay."""
     if pd.isna(rate):
         return "unmatched"
     if hours > OVERTIME_THRESHOLD:
@@ -41,6 +43,7 @@ def classify_pay(hours: float, rate: float) -> str:
 
 
 def add_gross_pay(payroll: pd.DataFrame) -> pd.DataFrame:
+    """Return a copy of `payroll` with one new column, `gross_pay` (float)."""
     out = payroll.copy()
     out["gross_pay"] = out.apply(
         lambda row: calc_gross_pay(row["hours_worked"], row["hourly_rate_usd"]),
@@ -50,6 +53,7 @@ def add_gross_pay(payroll: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_pay_type(payroll: pd.DataFrame) -> pd.DataFrame:
+    """Return a copy of `payroll` with one new column, `pay_type` (string)."""
     out = payroll.copy()
     out["pay_type"] = out.apply(
         lambda row: classify_pay(row["hours_worked"], row["hourly_rate_usd"]),
@@ -59,6 +63,7 @@ def add_pay_type(payroll: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_payroll(timesheet: pd.DataFrame, employees: pd.DataFrame) -> pd.DataFrame:
+    """Return a DataFrame with all the payroll columns, ready for export."""
     cleaned_timesheet = add_hours_worked(timesheet)
     cleaned_employees = add_hourly_rate(employees)
     merged = merge_employees(cleaned_timesheet, cleaned_employees)
@@ -68,7 +73,9 @@ def build_payroll(timesheet: pd.DataFrame, employees: pd.DataFrame) -> pd.DataFr
 
 
 def payroll_export(payroll: pd.DataFrame) -> pd.DataFrame:
+    """Return a copy of `payroll` with only the columns the provider wants, renamed."""
     export = payroll[payroll["pay_type"] != "unmatched"].copy()
-    export = export[["payroll_date", "employee_id", "hours_worked", "hourly_rate_usd", "gross_pay"]]
+    export = export[["payroll_date", "employee_id", "hours_worked", "hourly_rate_usd",
+                    "gross_pay"]]
     export.columns = ["payrolldate", "employeeid", "hours", "rate", "total"]
     return export
