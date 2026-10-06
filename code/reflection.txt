@@ -1,6 +1,1 @@
-Write your reflection here.
-
-See reflection.md for what makes a good reflection — be specific, use the
-terminology from this assignment (lineage, grain, element function, Series.apply,
-row apply / axis=1, left merge, NaN, coerce, copy-add-return, boolean index,
-export), and make it actionable.
+This assignment helped me understand how a payroll pipeline keeps lineage by preserving the original columns and using the copy-add-return pattern. I learned that the grain is one row per timesheet row and that a left merge keeps employees whose roster information is missing as NaN. I struggled with converting minutes into hours and forgetting axis=1 when calculating gross pay. Series.apply uses an element function on each value, while row apply lets a function use hours and rates together. I also learned to coerce messy input into numbers, use a boolean index to find unmatched employees, and create a separate export without changing the payroll table. Next time, I will test each function before moving on and practice choosing between Series.apply and row apply.

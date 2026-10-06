@@ -22,11 +22,27 @@ import pandas as pd
 
 
 def parse_hours(value) -> float:
-    if not isinstance(value, str):
-        if pd.isna(value):
-            return 0.0
-        else:
-            return float(value)
+    if pd.isna(value):
+        return 0.0
+
+    try:
+        text = str(value).strip()
+
+        if "h" not in text and "m" not in text:
+            return float(text)
+
+        hours = 0.0
+        for word in text.split():
+            if word.endswith("h"):
+                hours += float(word[:-1])
+            elif word.endswith("m"):
+                hours += float(word[:-1]) / 60
+            else:
+                return 0.0
+
+        return hours
+    except ValueError:
+        return 0.0
 
 
 def clean_currency(value) -> float:
